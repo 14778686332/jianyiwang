@@ -1,0 +1,26 @@
+已压缩
+用的时候要创建一个数据库，名字叫jianyi
+你也可以改数据库名
+
+在api/01.conn.php里面更改
+
+<?php
+    
+    //1.连接数据库
+    $severname = "localhost";
+    $username = "root";
+    $pwd = ""; //密码
+    $dbname = "jianyi"; //数据库名字
+
+    //2.创建链接
+    $conn = new mysqli($severname,$username,$pwd,$dbname);
+
+    if($conn->connect_error){
+        die("连接失败："+$conn->connect_error);
+    }
+
+    mysqli_set_charset($conn,"utf8");
+
+?>
+
+然后把sql文件夹里面的.sql文件导入上面那个数据库就可以用了
