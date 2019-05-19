@@ -1,1 +1,410 @@
-"use strict";require.config({paths:{jquery:"../lib/js/jquery-1.10.1.min",common:"common"},shim:{}}),require(["jquery","common"],function(u){!function(){u(window).bind("scroll resize",function(){u(window).width();400<u(window).scrollTop()?u("#toTop").slideDown("slow"):u("#toTop").slideUp("slow")}),u(".gocart").click(function(){getcookie("name")?location.href="../html/cart.html":confirm("请登录")&&(location.href="../html/login.html")});var t=new Swiper("#swiper1",{autoplay:{delay:2e3},loop:!0,pagination:{el:".swiper-pagination",clickable:!0,renderBullet:function(t,e){return'<span class="'+e+'">'+(t+1)+"</span>"}},navigation:{nextEl:".swiper-button-next",prevEl:".swiper-button-prev"},effect:"fade"}),e=document.getElementById("swiper1"),o=document.querySelector("#swiper1 .swiper-button-prev"),n=document.querySelector("#swiper1 .swiper-button-next");e.onmouseover=function(){t.autoplay.stop(),o.style.display="block",o.style.opacity=".1",n.style.display="block",n.style.opacity=".1"},e.onmouseout=function(){t.autoplay.start(),o.style.display="none",n.style.display="none"};var a=new Swiper("#swiper2",{autoplay:{delay:3e3},slidesPerView:3,spaceBetween:0,slidesPerGroup:3,loop:!0,loopFillGroupWithBlank:!0,navigation:{nextEl:".swiper-button-next",prevEl:".swiper-button-prev"}}),i=document.getElementById("swiper2"),l=document.querySelector("#swiper2 .swiper-button-prev"),s=document.querySelector("#swiper2 .swiper-button-next");i.onmouseover=function(){a.autoplay.stop(),l.style.display="block",l.style.opacity=".1",s.style.display="block",s.style.opacity=".1"},i.onmouseout=function(){a.autoplay.start(),l.style.display="none",s.style.display="none"}}(),u(function(){if(getcookie("name")){var t=getcookie("name");u("#dengluhou").html("您好，"+t+"欢迎来到健一网网上药店!<a id='tc' href='index1.html'>退出</a>")}else u("#dengluhou").html('欢迎来到健一网<h1>网上药店</h1>！[ <a href="html/login.html">登录</a> ] [ <a href="html/register.html">注册</a> ]');if(getcookie("name"))u.ajax({type:"get",url:"api/index.php",data:"username="+getcookie("name"),success:function(t){var e=JSON.parse(t);if(console.log(e),e.tiao){for(var o=e.zongtiao[0]["sum(counts)"],n=0,a=0;a<e.biao.length;a++)n+=e.biao[a].counts*e.biao[a].dmoney;console.log(n);var i='<div class="zlc">\n                                    共<b>'+e.zongtiao[0]["sum(counts)"]+"</b>件商品　共计<strong>￥"+n+'.00</strong><br>\n                                    <a title="去结算" href="html/cart.html">去结算<em></em></a>\n                                    <input type="hidden" id="shopcartPatternForMini" value="gouwu">\n                                </div>',l=e.biao.map(function(t){return'<li>\n                                    <div class="w-img fl">\n                                        <a href="###">\n                                            <img src="'+t.dimg+'" width="50" height="50">\n                                        </a>\n                                    </div>\n                                    <div class="w-tit fl">\n                                        <div class="nk" style="height: 50px;">\n                                            <a href="###"> '+t.dgoodsname+'</a>\n                                            <a href="#" title="" class="orange" style="font-weight: bold;"> </a><br> <br>\n                                        </div>\n                                    </div>\n                                    <div class="w-sale fl">\n                                        <span id="sum61647-0" class="sum">'+t.dmoney+'.00</span>\n                                    </div>\n                                    <div class="w-detail fr">\n                                        <div class="asub">\n                                            <a data-id="'+t.huohao+'" href="###" class="jianhao"></a>\n                                            <input data-id="'+t.huohao+'" class="zhi" min-amount="1" type="text" value="'+t.counts+'">\n                                            <a href="###" class="jiahao" data-id="'+t.huohao+'"></a>\n                                        </div>\n                                        <a data-id="'+t.huohao+'" href="###" class="delete">删除</a>\n                                    </div>\n                                </li>'}).join("");u("#shopcarDiv .zlb").html(u("<ul></ul>").append(l)),u("#shopcarDiv").append(i),u("#cartCount").html(o),u(".jiahao").click(function(){var t=0,e=0,o=u(this).prev().val();o++,u(this).prev().val(o);for(var n=0;n<u(".zlb ul li").size();n++)t+=u(".jiahao").eq(n).parent().parent().prev().find(".sum").html()*u(".jiahao").eq(n).prev().val(),e+=1*u(".jiahao").eq(n).prev().val();u(".zlc strong").html("￥"+t+".00"),u(".zlc b").html(e),u("#cartCount").html(e),u.ajax({type:"get",url:"api/index2.php",data:"username="+getcookie("name")+"&huohao="+u(this).attr("data-id")+"&vall="+o,success:function(t){console.log(t)}})}),u(".jianhao").click(function(){var t=0,e=0,o=u(this).next().val();--o<=1&&(o=1),u(this).next().val(o);for(var n=0;n<u(".zlb ul li").size();n++)t+=u(".jianhao").eq(n).parent().parent().prev().find(".sum").html()*u(".jianhao").eq(n).next().val(),e+=1*u(".jiahao").eq(n).prev().val();u(".zlc strong").html("￥"+t+".00"),u(".zlc b").html(e),u("#cartCount").html(e),u.ajax({type:"get",url:"api/index2.php",data:"username="+getcookie("name")+"&huohao="+u(this).attr("data-id")+"&vall="+o,success:function(t){console.log(t)}})}),u(".zhi").blur(function(){for(var t=0,e=0,o=0;o<u(".zlb ul li").size();o++)t+=u(".zhi").eq(o).parent().parent().prev().find(".sum").html()*u(".zhi").eq(o).val(),e+=1*u(".jiahao").eq(o).prev().val();console.log(u(this).val()),u(".zlc strong").html("￥"+t+".00"),u(".zlc b").html(e),u("#cartCount").html(e),u.ajax({type:"get",url:"api/index2.php",data:"username="+getcookie("name")+"&huohao="+u(this).attr("data-id")+"&vall="+u(this).val(),success:function(t){console.log(t)}})}),u(".delete").click(function(){u(this).parent().parent().remove();for(var t=0,e=0,o=0;o<u(".zlb ul li").size();o++)t+=u(".zhi").eq(o).parent().parent().prev().find(".sum").html()*u(".zhi").eq(o).val(),e+=1*u(".jiahao").eq(o).prev().val();u(".zlc strong").html("￥"+t+".00"),u(".zlc b").html(e),u("#cartCount").html(e),u.ajax({type:"get",url:"api/indexdel.php",data:"username="+getcookie("name")+"&huohao="+u(this).attr("data-id"),success:function(t){if(0==t){u("#shopcarDiv .zlb").html('<div class="zla">\n                                        <em class="gwico"></em>\n                                        购物车空空如也，赶紧选购吧!\n                                    </div>'),u("#cartCount").html("0"),u(".zlc").remove()}}})})}else{u("#shopcarDiv .zlb").html('<div class="zla">\n                        <em class="gwico"></em>\n                        购物车空空如也，赶紧选购吧!\n                    </div>'),u("#cartCount").html("0")}}});else{u("#shopcarDiv .zlb").html('<div class="zla">\n                        <em class="gwico"></em>\n                        购物车空空如也，赶紧选购吧!\n                    </div>'),u("#cartCount").html("0")}u(".logo_rc").hover(function(){u(this).addClass("act"),u("#shopcarDiv").css("display","block")},function(){u(this).removeClass("act"),u("#shopcarDiv").css("display","none")}),u("#shopcarDiv").hover(function(){u(this).css("display","block"),u(".logo_rc").addClass("act")},function(){u(this).css("display","none"),u(".logo_rc").removeClass("act")}),u("#tc").click(function(){removecookie("name"),location.href="index1.html"}),u(".swiper-button-prev").hover(function(){console.log("x"),u(this).stop().animate({opacity:.6},500)},function(){u(this).stop().animate({opacity:.1},500)}),u(".swiper-button-next").hover(function(){console.log("x"),u(this).stop().animate({opacity:.6},500)},function(){u(this).stop().animate({opacity:.1},500)}),u(".xl-tit ul li").mouseover(function(){u(this).attr("class","act").siblings().attr("class",""),u(".xlqg_b .xl-products").eq(u(this).index()).css("display","block").siblings().css("display","none")});var e=u(".xgg_t").index()+1;u(".xgg_t .hd li").mouseover(function(){u(this).attr("class","on_hover").siblings().attr("class",""),u(".xgg_t:nth-child("+e+") .bd li").eq(u(this).index()).css("display","list-item").siblings().css("display","none")}),u(".tgys p a").mouseover(function(){e=u(this).index()+1,u(this).attr("class","act").siblings().attr("class",""),u(".xgg_t").eq(u(this).index()).css("display","block").siblings().css("display","none")}),console.log(u("#floorDiv1 .floorcenter").length);for(var o=function(o){u("#floorDiv"+o+" .floortitle a").mouseover(function(){var t=u("#floorDiv"+o+" .floorcenter").size();u(this).attr("class","current").siblings().attr("class",""),console.log(t);for(var e=0;e<t;e++)u("#floorDiv"+o+" .floorcenter").eq(e).css("display","none");u("#floorDiv"+o+" .floorcenter").eq(u(this).index()).css("display","block")})},n=1;n<=u(".floor").length;n++)o(n);u(".hotmend").hover(function(){u(this).find(".hd").stop().fadeIn(),clearInterval(r)},function(){u(this).find(".hd").stop().fadeOut(),r=setInterval(h,3e3)});var a=u(".hotmend .bd ul li").css("width").split("p")[0];u(".hotmend .bd ul").css("width",6*a+"px");var i=u(".yqlj .tempWarp ul li").css("height").split("p")[0];u(".yqlj .tempWarp ul").css("height",4*i+"px");var l=setInterval(s,2500);e=0;function s(){4<=++e&&(u(".yqlj .tempWarp ul").css("top",-i+"px"),e=2),u(".yqlj .tempWarp ul").animate({top:-i*e},500,"linear")}u(".yqlj .tempWarp ul li").hover(function(){clearInterval(l)},function(){l=setInterval(s,2500)});var r=setInterval(h,4e3),c=0;function h(){c++,p()}function p(){6<=c?(u(".hotmend .bd ul").css("left",-a+"px"),c=2):c<0&&(u(".hotmend .bd ul").css("left",4*-a+"px"),c=3),u(".hotmend .bd ul").animate({left:-a*c},1e3,"linear")}u(".hotmend .hd .prev").click(function(){c--,p()}),u(".hotmend .hd .next").click(function(){c++,p()})})});
+// 引入模块
+require.config({ //配置参数设置
+    paths: { //用于配置短路径的，重命名的，一般对不是在基础路径下的文件进行重命名
+        'jquery': '../lib/js/jquery-1.10.1.min',
+        'common': 'common'
+    },
+    shim: { //设置依赖关系
+
+    }
+})
+
+require(["jquery", "common"], function($) {
+
+    (function() {
+
+        $(window).bind("scroll resize", function() {
+            var winwidth = $(window).width();
+            if ($(window).scrollTop() > 400) {
+                $("#toTop").slideDown("slow");
+            } else {
+                $("#toTop").slideUp("slow");
+            }
+        })
+
+        $(".gocart").click(function() {
+            if (getcookie("name")) {
+                location.href = "html/cart.html";
+            } else {
+                var res = confirm("请登录");
+                if (res) {
+                    location.href = "html/login.html";
+                }
+            }
+        })
+
+        var mySwiper1 = new Swiper('#swiper1', {
+            autoplay: {
+                delay: 2000,
+            },
+            loop: true,
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+                renderBullet: function(index, className) {
+                    return '<span class="' + className + '">' + (index + 1) + '</span>';
+                },
+            },
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+            effect: 'fade',
+        });
+        var swiper1 = document.getElementById('swiper1');
+        var prev1 = document.querySelector('#swiper1 .swiper-button-prev');
+        var next1 = document.querySelector('#swiper1 .swiper-button-next');
+        swiper1.onmouseover = function() {
+            mySwiper1.autoplay.stop();
+            prev1.style.display = 'block';
+            prev1.style.opacity = ".1"
+            next1.style.display = 'block';
+            next1.style.opacity = ".1"
+        }
+        swiper1.onmouseout = function() {
+            mySwiper1.autoplay.start();
+            prev1.style.display = 'none';
+            next1.style.display = 'none';
+        }
+        var mySwiper2 = new Swiper('#swiper2', {
+            autoplay: {
+                delay: 3000,
+            },
+            slidesPerView: 3,
+            spaceBetween: 0,
+            slidesPerGroup: 3,
+            loop: true,
+            loopFillGroupWithBlank: true,
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+        });
+        var swiper2 = document.getElementById('swiper2');
+        var prev = document.querySelector('#swiper2 .swiper-button-prev');
+        var next = document.querySelector('#swiper2 .swiper-button-next');
+        swiper2.onmouseover = function() {
+            mySwiper2.autoplay.stop();
+            prev.style.display = 'block';
+            prev.style.opacity = ".1"
+            next.style.display = 'block';
+            next.style.opacity = ".1"
+        }
+        swiper2.onmouseout = function() {
+            mySwiper2.autoplay.start();
+            prev.style.display = 'none';
+            next.style.display = 'none';
+        }
+    })();
+    $(function() {
+        if (getcookie('name')) {
+            var str = getcookie('name');
+            $("#dengluhou").html("您好，" + str + "欢迎来到健一网网上药店!<a id='tc' href='index.html'>退出</a>");
+        } else {
+            $("#dengluhou").html('欢迎来到健一网<h1>网上药店</h1>！[ <a href="html/login.html">登录</a> ] [ <a href="html/register.html">注册</a> ]');
+        }
+
+        if (getcookie('name')) {
+            $.ajax({
+                type: "get",
+                url: "api/index.php",
+                data: "username=" + getcookie('name'),
+                success: function(str) {
+                    var arr = JSON.parse(str);
+                    console.log(arr);
+                    if (arr.tiao) {
+                        var zongtiao = arr.zongtiao[0]["sum(counts)"];
+                        var zongjia = 0;
+                        for (var i = 0; i < arr.biao.length; i++) {
+                            zongjia += arr.biao[i].counts * arr.biao[i].dmoney;
+                        }
+                        console.log(zongjia);
+                        var zlc = `<div class="zlc">
+                                    共<b>${arr.zongtiao[0]["sum(counts)"]}</b>件商品　共计<strong>￥${zongjia}.00</strong><br>
+                                    <a title="去结算" href="html/cart.html">去结算<em></em></a>
+                                    <input type="hidden" id="shopcartPatternForMini" value="gouwu">
+                                </div>`;
+                        var zla = arr.biao.map(function(item) {
+                            return `<li>
+                                    <div class="w-img fl">
+                                        <a href="###">
+                                            <img src="${item.dimg}" width="50" height="50">
+                                        </a>
+                                    </div>
+                                    <div class="w-tit fl">
+                                        <div class="nk" style="height: 50px;">
+                                            <a href="###"> ${item.dgoodsname}</a>
+                                            <a href="#" title="" class="orange" style="font-weight: bold;"> </a><br> <br>
+                                        </div>
+                                    </div>
+                                    <div class="w-sale fl">
+                                        <span id="sum61647-0" class="sum">${item.dmoney}.00</span>
+                                    </div>
+                                    <div class="w-detail fr">
+                                        <div class="asub">
+                                            <a data-id="${item.huohao}" href="###" class="jianhao"></a>
+                                            <input data-id="${item.huohao}" class="zhi" min-amount="1" type="text" value="${item.counts}">
+                                            <a href="###" class="jiahao" data-id="${item.huohao}"></a>
+                                        </div>
+                                        <a data-id="${item.huohao}" href="###" class="delete">删除</a>
+                                    </div>
+                                </li>`;
+                        }).join("");
+
+                        // $("<ul></ul>").append(zlc);
+                        $("#shopcarDiv .zlb").html($("<ul></ul>").append(zla));
+                        $("#shopcarDiv").append(zlc);
+                        $("#cartCount").html(zongtiao);
+
+                        $(".jiahao").click(function() {
+                            var sum = 0;
+                            var sl = 0;
+                            var num = $(this).prev().val();
+                            num++;
+                            $(this).prev().val(num);
+                            for (var i = 0; i < $(".zlb ul li").size(); i++) {
+                                sum += $(".jiahao").eq(i).parent().parent().prev().find(".sum").html() * $(".jiahao").eq(i).prev().val();
+                                sl += $(".jiahao").eq(i).prev().val() * 1;
+                            }
+                            $(".zlc strong").html("￥" + sum + ".00");
+                            $(".zlc b").html(sl);
+                            $("#cartCount").html(sl);
+                            $.ajax({
+                                type: "get",
+                                url: "api/index2.php",
+                                data: "username=" + getcookie('name') + "&huohao=" + $(this).attr("data-id") + "&vall=" + num,
+                                success: function(str) {
+                                    console.log(str);
+                                }
+                            })
+
+                        })
+
+                        $(".jianhao").click(function() {
+                            var sum = 0;
+                            var sl = 0;
+                            var num = $(this).next().val();
+                            num--;
+                            if (num <= 1) {
+                                num = 1;
+                            }
+                            $(this).next().val(num);
+                            for (var i = 0; i < $(".zlb ul li").size(); i++) {
+                                sum += $(".jianhao").eq(i).parent().parent().prev().find(".sum").html() * $(".jianhao").eq(i).next().val();
+                                sl += $(".jiahao").eq(i).prev().val() * 1;
+                            }
+                            $(".zlc strong").html("￥" + sum + ".00");
+                            $(".zlc b").html(sl);
+                            $("#cartCount").html(sl);
+
+                            $.ajax({
+                                type: "get",
+                                url: "api/index2.php",
+                                data: "username=" + getcookie('name') + "&huohao=" + $(this).attr("data-id") + "&vall=" + num,
+                                success: function(str) {
+                                    console.log(str);
+                                }
+                            })
+                        })
+
+                        $(".zhi").blur(function() {
+                            var sum = 0;
+                            var sl = 0;
+                            for (var i = 0; i < $(".zlb ul li").size(); i++) {
+                                sum += $(".zhi").eq(i).parent().parent().prev().find(".sum").html() * $(".zhi").eq(i).val();
+                                sl += $(".jiahao").eq(i).prev().val() * 1;
+                            }
+                            console.log($(this).val());
+                            $(".zlc strong").html("￥" + sum + ".00");
+                            $(".zlc b").html(sl);
+                            $("#cartCount").html(sl);
+
+                            $.ajax({
+                                type: "get",
+                                url: "api/index2.php",
+                                data: "username=" + getcookie('name') + "&huohao=" + $(this).attr("data-id") + "&vall=" + $(this).val(),
+                                success: function(str) {
+                                    console.log(str);
+                                }
+                            })
+                        })
+
+                        $(".delete").click(function() {
+                            $(this).parent().parent().remove();
+                            var sum = 0;
+                            var sl = 0;
+                            for (var i = 0; i < $(".zlb ul li").size(); i++) {
+                                sum += $(".zhi").eq(i).parent().parent().prev().find(".sum").html() * $(".zhi").eq(i).val();
+                                sl += $(".jiahao").eq(i).prev().val() * 1;
+                            }
+                            $(".zlc strong").html("￥" + sum + ".00");
+                            $(".zlc b").html(sl);
+                            $("#cartCount").html(sl);
+
+                            $.ajax({
+                                type: "get",
+                                url: "api/indexdel.php",
+                                data: "username=" + getcookie('name') + "&huohao=" + $(this).attr("data-id"),
+                                success: function(str) {
+                                    if (str == 0) {
+                                        var html = `<div class="zla">
+                                        <em class="gwico"></em>
+                                        购物车空空如也，赶紧选购吧!
+                                    </div>`;
+                                        $("#shopcarDiv .zlb").html(html);
+                                        $("#cartCount").html("0");
+                                        $(".zlc").remove();
+                                    }
+                                }
+                            })
+                        })
+
+                    } else {
+                        var html = `<div class="zla">
+                        <em class="gwico"></em>
+                        购物车空空如也，赶紧选购吧!
+                    </div>`;
+                        $("#shopcarDiv .zlb").html(html);
+                        $("#cartCount").html("0");
+                    }
+                }
+
+            })
+        } else {
+            var html = `<div class="zla">
+                        <em class="gwico"></em>
+                        购物车空空如也，赶紧选购吧!
+                    </div>`;
+            $("#shopcarDiv .zlb").html(html);
+            $("#cartCount").html("0");
+        }
+
+
+
+        $(".logo_rc").hover(function() {
+            $(this).addClass("act");
+            $("#shopcarDiv").css("display", "block");
+        }, function() {
+            $(this).removeClass("act");
+            $("#shopcarDiv").css("display", "none");
+        })
+
+        $("#shopcarDiv").hover(function() {
+            $(this).css("display", "block");
+            $(".logo_rc").addClass("act");
+        }, function() {
+            $(this).css("display", "none");
+            $(".logo_rc").removeClass("act");
+        })
+
+        $("#tc").click(function() {
+            removecookie('name');
+            location.href = 'index.html';
+        })
+
+        $(".swiper-button-prev").hover(function() {
+            console.log('x');
+            $(this).stop().animate({ "opacity": .6 }, 500);
+        }, function() {
+            $(this).stop().animate({ "opacity": .1 }, 500);
+        })
+        $(".swiper-button-next").hover(function() {
+            console.log('x');
+            $(this).stop().animate({ "opacity": .6 }, 500);
+        }, function() {
+            $(this).stop().animate({ "opacity": .1 }, 500);
+        })
+        $(".xl-tit ul li").mouseover(function() {
+            $(this).attr('class', 'act').siblings().attr('class', "");
+            $(".xlqg_b .xl-products").eq($(this).index()).css('display', 'block').siblings().css('display', 'none');
+
+        })
+        var x = $('.xgg_t').index() + 1;
+        $(".xgg_t .hd li").mouseover(function() {
+
+            $(this).attr("class", "on_hover").siblings().attr("class", "");
+            $(".xgg_t:nth-child(" + x + ") .bd li").eq($(this).index()).css('display', 'list-item').siblings().css('display', 'none');
+        })
+
+        $(".tgys p a").mouseover(function() {
+            x = $(this).index() + 1;
+            $(this).attr('class', 'act').siblings().attr('class', "");
+            $(".xgg_t").eq($(this).index()).css('display', 'block').siblings().css('display', 'none');
+        })
+
+        console.log($("#floorDiv1 .floorcenter").length);
+        for (let i = 1; i <= $(".floor").length; i++) {
+            $("#floorDiv" + i + " .floortitle a").mouseover(function() {
+                var len = $("#floorDiv" + i + " .floorcenter").size();
+                $(this).attr('class', 'current').siblings().attr('class', "");
+
+                console.log(len);
+                for (var j = 0; j < len; j++) {
+                    $("#floorDiv" + i + " .floorcenter").eq(j).css('display', 'none');
+                }
+                $("#floorDiv" + i + " .floorcenter").eq($(this).index()).css('display', 'block');
+            })
+        }
+
+        $(".hotmend").hover(function() {
+            $(this).find(".hd").stop().fadeIn();
+            clearInterval(timer);
+        }, function() {
+            $(this).find(".hd").stop().fadeOut();
+            timer = setInterval(next, 3000);
+        })
+
+        var ih = $(".hotmend .bd ul li").css("width").split("p")[0];
+        $(".hotmend .bd ul").css("width", ih * 6 + "px");
+
+        var iw = $(".yqlj .tempWarp ul li").css("height").split("p")[0];
+        $(".yqlj .tempWarp ul").css("height", iw * 4 + "px");
+
+        var timer1 = setInterval(shang, 2500);
+        var x = 0;
+
+        function shang() {
+            x++;
+            if (x >= 4) {
+                $(".yqlj .tempWarp ul").css("top", -iw + "px");
+                x = 2;
+            }
+            $(".yqlj .tempWarp ul").animate({ 'top': -iw * x }, 500, "linear");
+        }
+
+        $(".yqlj .tempWarp ul li").hover(function() {
+            clearInterval(timer1);
+        }, function() {
+            timer1 = setInterval(shang, 2500);
+        })
+        var timer = setInterval(next, 4000);
+        var num = 0;
+
+        function next() {
+            num++;
+            show();
+        }
+
+        function show() {
+            if (num >= 6) {
+                $(".hotmend .bd ul").css("left", -ih + "px");
+                num = 2;
+            } else if (num < 0) {
+                $(".hotmend .bd ul").css("left", -ih * 4 + "px");
+                num = 3;
+            }
+
+            $(".hotmend .bd ul").animate({ "left": -ih * num }, 1000, "linear");
+        }
+
+        $(".hotmend .hd .prev").click(function() {
+            num--;
+            show();
+        })
+
+        $(".hotmend .hd .next").click(function() {
+            num++;
+            show();
+        })
+    })
+})
